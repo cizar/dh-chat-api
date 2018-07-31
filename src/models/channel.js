@@ -28,6 +28,7 @@ schema.statics = {
   list () {
     const pipeline = [{
       '$project': {
+        'topic': '$topic',
         'members': {
           '$size': '$members'
         }
