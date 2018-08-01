@@ -53,6 +53,6 @@ const connectDatabase = () => {
 connectDatabase()
   .then(startServer)
   .catch(err => {
-    console.err(err)
+    console.error(err)
     process.exit(1)
   })
