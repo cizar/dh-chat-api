@@ -13,11 +13,29 @@ Iniciar servidor local de desarrollo
 ```
 npm start
 ```
+## Configurar
 
-Inciar servidor configurando la conexión a MongoDB
+Se puede configurar la aplicación creando el archivo `.env` en la raíz del proyecto
 
 ```
-MONGODB_URI=mongodb://user:password@hostname:27017/dbname npm start
+# .env
+
+PORT=8080
+HOST=127.0.0.1
+
+MONGODB_URI=mongodb://user:pass@hostname:port/dbname
+
+SALT_WORK_FACTOR=10
+
+JWT_SECRET=S3cr3t!
+JWT_ISSUER=dh-chat-api
+JWT_EXPIRES_IN=1h
+```
+
+O bien pasando la configuración como variables del entorno
+
+```
+MONGODB_URI=mongodb://user:pass@hostname:port/dbname npm start
 ```
 
 ## Endpoints
@@ -36,4 +54,4 @@ MONGODB_URI=mongodb://user:password@hostname:27017/dbname npm start
 | `/api/channels/:id/members`    | **GET**    | Obtener los participantes del canal |
 | `/api/channels/:id/members`    | **DELETE** | Salir del canal                     |
 | `/api/channels/:id/messages`   | **POST**   | Enviar un mensaje al canal          |
-| `/api/channels/:id/messages`   | **GET**    | Obtener los eventos del canal       |
+| `/api/channels/:id/messages`   | **GET**    | Obtener los mensajes del canal      |

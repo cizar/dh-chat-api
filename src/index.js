@@ -37,16 +37,22 @@ app.use(handleNotFound)
 app.use(handleValidationError)
 app.use(handleError)
 
-
 const startServer = () => {
   const server = app.listen(PORT, HOST, () => {
     console.log('Server listening on port %d', server.address().port)
   })
 }
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+const connectDatabase = () => {
+  return mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+    .then(() => {
+      console.log('Mongoose connected to %s', mongoose.connections[0].host)
+    })
+}
+
+connectDatabase()
   .then(startServer)
-  .catch(err=> {
-    console.error(err)
+  .catch(err => {
+    console.err(err)
     process.exit(1)
   })
