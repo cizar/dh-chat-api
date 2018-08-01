@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import express from 'express'
 import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
@@ -10,6 +9,12 @@ import {
   handleError
 } from './middlewares'
 import routes from './routes'
+import {
+  PORT,
+  HOST,
+  MONGODB_URI,
+  JWT_SECRET
+} from './config'
 
 const app = express()
 
@@ -22,7 +27,7 @@ const unprotected = [
 ]
 
 app.use(
-  jwt({ secret: process.env.JWT_SECRET })
+  jwt({ secret: JWT_SECRET })
     .unless({ path: unprotected })
 )
 
@@ -32,7 +37,6 @@ app.use(handleNotFound)
 app.use(handleValidationError)
 app.use(handleError)
 
-const { PORT, HOST, MONGODB_URI } = process.env
 
 const startServer = () => {
   const server = app.listen(PORT, HOST, () => {

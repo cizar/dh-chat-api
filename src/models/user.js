@@ -1,10 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import bcrypt from 'bcrypt'
-
-const {
-  SALT_WORK_FACTOR
-} = process.env
+import { SALT_WORK_FACTOR } from '../config'
 
 const schema = new Schema({
   username: {

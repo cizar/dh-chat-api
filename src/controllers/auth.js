@@ -1,11 +1,10 @@
 import User from '../models/user'
 import jwt from 'jsonwebtoken'
-
-const {
+import {
   JWT_SECRET,
   JWT_ISSUER,
   JWT_EXPIRES_IN
-} = process.env
+} from '../config'
 
 export const login = (req, res, next) =>
   User.findByUsername(req.body.username)
