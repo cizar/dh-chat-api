@@ -4,6 +4,11 @@ const schema = new Schema({
   text: {
     type: String
   },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   channel: {
     type: Schema.Types.ObjectId,
     ref: 'Channel'

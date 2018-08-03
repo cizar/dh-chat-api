@@ -37,7 +37,8 @@ export const destroy = (req, res, next) =>
 export const postMessage = (req, res, next) =>
   Message.create({
     ...req.body,
-    channel: req.channel.id
+    channel: req.channel.id,
+    author: req.user.sub
   })
     .then(message => res.send(message))
     .catch(next)
