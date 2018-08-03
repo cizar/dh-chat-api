@@ -1,4 +1,5 @@
 import Channel from '../models/channel'
+import Message from '../models/message'
 
 export const create = (req, res, next) =>
   Channel.create({
@@ -34,12 +35,15 @@ export const destroy = (req, res, next) =>
     .catch(next)
 
 export const postMessage = (req, res, next) =>
-  api.messages.create(req.body, req.channel.id)
+  Message.create({
+    ...req.body,
+    channel: req.channel.id
+  })
     .then(message => res.send(message))
     .catch(next)
 
 export const listMessages = (req, res, next) =>
-  api.messages.findByChannelId(req.channel.id)
+  Message.listByChannelId(req.channel.id)
     .then(messages => res.send(messages))
     .catch(next)
 

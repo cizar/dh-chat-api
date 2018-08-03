@@ -12,4 +12,10 @@ const schema = new Schema({
   timestamps: true
 })
 
+schema.statics = {
+  listByChannelId (id) {
+    return this.find({ channel: id })
+  }
+}
+
 export default mongoose.model('Message', schema)
