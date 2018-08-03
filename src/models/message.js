@@ -18,10 +18,14 @@ const schema = new Schema({
 })
 
 schema.statics = {
-  listByChannelId (id) {
-    return this.find({ channel: id })
+  listByChannelId (id, since) {
+    const query = { channel: id }
+    if (since) {
+      query['_id'] = { '$gt': since }
+    }
+    return this.find(query)
+      .sort('-_id')
       .populate('author', 'username')
-
   }
 }
 

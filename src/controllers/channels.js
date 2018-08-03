@@ -44,7 +44,7 @@ export const postMessage = (req, res, next) =>
     .catch(next)
 
 export const listMessages = (req, res, next) =>
-  Message.listByChannelId(req.channel.id)
+  Message.listByChannelId(req.channel.id, req.query.since)
     .then(messages => res.send(messages))
     .catch(next)
 
