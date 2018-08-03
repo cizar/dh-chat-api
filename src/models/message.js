@@ -20,6 +20,8 @@ const schema = new Schema({
 schema.statics = {
   listByChannelId (id) {
     return this.find({ channel: id })
+      .populate('author')
+
   }
 }
 
