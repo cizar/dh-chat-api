@@ -10,11 +10,11 @@ router
     .get(user.list)
 
 router
-  .param('id', user.load)
+  .param('username', user.load)
 
 router
-  .route('/:id')
+  .route('/:username')
+    .head(user.exist)
     .get(user.show)
-
 
 export default router

@@ -3,18 +3,9 @@ import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import jwt from 'express-jwt'
-import {
-  handleNotFound,
-  handleValidationError,
-  handleError
-} from './middlewares'
+import { notFound, validationError, errorHandler } from './middlewares'
 import routes from './routes'
-import {
-  PORT,
-  HOST,
-  MONGODB_URI,
-  JWT_SECRET
-} from './config'
+import config from './config'
 
 const app = express()
 
@@ -27,26 +18,28 @@ const unprotected = [
 ]
 
 app.use(
-  jwt({ secret: JWT_SECRET })
-    .unless({ path: unprotected })
+  jwt({ secret: config.jwt.secret })
+    .unless({ path: unprotected, method: ['OPTIONS', 'HEAD'] })
 )
 
 app.use('/api', routes)
 
-app.use(handleNotFound)
-app.use(handleValidationError)
-app.use(handleError)
+app.use(notFound)
+app.use(validationError)
+app.use(errorHandler)
 
 const startServer = () => {
-  const server = app.listen(PORT, HOST, () => {
+  console.log('Starting server...')
+  const server = app.listen(config.port, config.host, () => {
     console.log('Server listening on port %d', server.address().port)
   })
 }
 
 const connectDatabase = () => {
-  return mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+  console.log('Connecting to MongoDB...')
+  return mongoose.connect(config.mongodb.uri, { useNewUrlParser: true })
     .then(() => {
-      console.log('Mongoose connected to %s', mongoose.connections[0].host)
+      console.log('Connected to %s', mongoose.connections[0].host)
     })
 }
 

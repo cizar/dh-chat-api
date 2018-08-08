@@ -1,27 +1,24 @@
 import User from '../models/user'
 import jwt from 'jsonwebtoken'
-import {
-  JWT_SECRET,
-  JWT_ISSUER,
-  JWT_EXPIRES_IN
-} from '../config'
+import APIError from '../helpers/APIError'
+import config from '../config'
 
 export const login = (req, res, next) =>
   User.findByUsername(req.body.username)
     .then(user => {
       if (!user) {
-        throw new Error('Login failed')
+        throw new APIError('Login failed', 400)
       }
       return user.comparePassword(req.body.password)
         .then(match => {
           if (!match) {
-            throw new Error('Login failed')
+            throw new APIError('Login failed', 400)
           }
           const token = jwt.sign({
             username: user.username
-          }, JWT_SECRET, {
-            issuer: JWT_ISSUER,
-            expiresIn: JWT_EXPIRES_IN,
+          }, config.jwt.secret, {
+            issuer: config.jwt.issuer,
+            expiresIn: config.jwt.expiresIn,
             subject: user.id
           })
           res.send({ token })

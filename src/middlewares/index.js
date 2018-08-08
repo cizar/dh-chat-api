@@ -1,3 +1,3 @@
-export { default as handleError } from './handleError'
-export { default as handleValidationError } from './handleValidationError'
-export { default as handleNotFound } from './handleNotFound'
+export { default as errorHandler } from './error_handler'
+export { default as validationError } from './validation_error'
+export { default as notFound } from './not_found'

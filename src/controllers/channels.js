@@ -1,5 +1,6 @@
 import Channel from '../models/channel'
 import Message from '../models/message'
+import APIError from '../helpers/APIError'
 
 export const create = (req, res, next) =>
   Channel.create({
@@ -8,7 +9,9 @@ export const create = (req, res, next) =>
     members: [req.user.sub]
   })
     .then(channel => res.send(channel))
-    .catch(next)
+    .catch(err => {
+      console.log(err)
+    })
 
 export const list = (req, res, next) =>
   Channel.list()
@@ -16,15 +19,15 @@ export const list = (req, res, next) =>
     .catch(next)
 
 export const load = (req, res, next, id) =>
-  Channel.get(id)
-    .then(channel => {
-      if (!channel) {
-        return next('Not found')
-      }
-      req.channel = channel
-      next()
-    })
-    .catch(next)
+    Channel.get(id)
+      .then(channel => {
+        if (!channel) {
+          throw new APIError('Channel does not exists', 404)
+        }
+        req.channel = channel
+        next()
+      })
+      .catch(next)
 
 export const show = (req, res, next) =>
   res.send(req.channel)

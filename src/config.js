@@ -1,16 +1,58 @@
 import 'dotenv/config'
+import convict from 'convict'
 
-export const PORT = process.env.PORT || '8080'
+const config = convict({
+  env: {
+    format: ['production', 'development', 'test'],
+    default: 'development',
+    env: 'NODE_ENV'
+  },
+  host: {
+    format: 'ipaddress',
+    default: '127.0.0.1',
+    env: 'HOST',
+    arg: 'host'
+  },
+  port: {
+    format: 'port',
+    default: 8080,
+    env: 'PORT',
+    arg: 'port'
+  },
+  saltRounds: {
+    format: 'nat',
+    default: 10,
+    env: 'BCRYPT_SALT_ROUNDS',
+    arg: 'saltRounds'
+  },
+  mongodb: {
+    uri: {
+      format: 'url',
+      default: 'mongodb://127.0.0.1:27017/dh-chat-api',
+      env: 'MONGODB_URI',
+      arg: 'db'
+    }
+  },
+  jwt: {
+    secret: {
+      format: String,
+      default: 'S3cr3t!',
+      env: 'JWT_SECRET',
+      arg: 'secret'
+    },
+    issuer: {
+      format: String,
+      default: 'dh-chat-api',
+      env: 'JWT_ISSUER',
+      arg: 'issuer'
+    },
+    expiresIn: {
+      format: String,
+      default: '1h',
+      env: 'JWT_EXP',
+      arg: 'exp'
+    }
+  }
+})
 
-export const HOST = process.env.HOST || '127.0.0.1'
-
-export const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/dh-chat-api'
-
-export const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR || '10'
-
-export const JWT_SECRET = process.env.JWT_SECRET || 'S3cr3t!'
-
-export const JWT_ISSUER = process.env.JWT_ISSUER || 'dh-chat-api'
-
-export const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h'
-
+export default config.get()

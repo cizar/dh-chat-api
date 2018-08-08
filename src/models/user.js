@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import bcrypt from 'bcrypt'
-import { SALT_WORK_FACTOR } from '../config'
+import config from '../config'
 
 const schema = new Schema({
   username: {
@@ -39,7 +39,7 @@ schema.pre('save', function (next) {
   if (!this.isModified('password')) {
     return next()
   }
-  bcrypt.genSalt(parseInt(SALT_WORK_FACTOR, 10), function (err, salt) {
+  bcrypt.genSalt(config.saltRounds, function (err, salt) {
     if (err) return next(err)
     bcrypt.hash(user.password, salt, function (err, hash) {
       if (err) return next(err)
