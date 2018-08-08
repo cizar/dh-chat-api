@@ -44,6 +44,7 @@ MONGODB_URI=mongodb://user:pass@hostname:port/dbname npm start
 |:-----------------------------------------|:----------:|:------------------------------------|
 | `/api/auth`                              | **POST**   | Crear certificado de identidad      |
 | `/api/users`                             | **POST**   | Registrar un nuevo usuario          |
+| `/api/users/:id`                         | **HEAD**   | Verificar que existe el usuario     |
 | `/api/users/:id`                         | **GET**    | Obtener información del usuario     |
 | `/api/channels`                          | **POST**   | Crear un cuarto de chat             |
 | `/api/channels`                          | **GET**    | Listado de cuartos de chat          |
