@@ -11,8 +11,8 @@ export const list = (req, res, next) =>
     .then(users => res.send(users))
     .catch(next)
 
-export const load = (req, res, next, username) =>
-    User.findByUsername(username)
+export const load = (req, res, next, id) =>
+    User.get(id)
       .then(user => {
         if (!user) {
           throw new APIError('User does not exists', 404)

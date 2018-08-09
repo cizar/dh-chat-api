@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose, { Schema, Types } from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import bcrypt from 'bcrypt'
 import config from '../config'
@@ -62,8 +62,12 @@ schema.methods = {
 }
 
 schema.statics = {
-  findByUsername (username) {
-    return this.findOne({ username }).exec()
+  get (id) {
+    const $or = [ { username: id }, { email: id }]
+    if (Types.ObjectId.isValid(id)) {
+      $or.push({ _id: id })
+    }
+    return this.findOne({ $or }).exec()
   },
   list () {
     const criteria = {}

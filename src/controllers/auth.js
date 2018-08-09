@@ -4,7 +4,7 @@ import APIError from '../helpers/APIError'
 import config from '../config'
 
 export const login = (req, res, next) =>
-  User.findByUsername(req.body.username)
+  User.get(req.body.username)
     .then(user => {
       if (!user) {
         throw new APIError('Login failed', 400)
