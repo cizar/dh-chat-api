@@ -13,8 +13,7 @@ const schema = new Schema({
   },
   members: [{
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    unique: true
+    ref: 'User'
   }]
 })
 

@@ -9,9 +9,7 @@ export const create = (req, res, next) =>
     members: [req.user.sub]
   })
     .then(channel => res.send(channel))
-    .catch(err => {
-      console.log(err)
-    })
+    .catch(next)
 
 export const list = (req, res, next) =>
   Channel.list()
