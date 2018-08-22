@@ -3,7 +3,7 @@ import APIError from '../helpers/APIError'
 
 export const signup = (req, res, next) =>
   User.create(req.body)
-    .then(user => res.send(user))
+    .then(user => res.status(201).send(user))
     .catch(next)
 
 export const list = (req, res, next) =>

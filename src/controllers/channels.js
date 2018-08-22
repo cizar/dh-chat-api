@@ -8,7 +8,7 @@ export const create = (req, res, next) =>
     owner: req.user.sub,
     members: [req.user.sub]
   })
-    .then(channel => res.send(channel))
+    .then(channel => res.status(201).send(channel))
     .catch(next)
 
 export const list = (req, res, next) =>
@@ -41,7 +41,7 @@ export const postMessage = (req, res, next) =>
     channel: req.channel.id,
     author: req.user.sub
   })
-    .then(message => res.send(message))
+    .then(message => res.status(201).send(message))
     .catch(next)
 
 export const listMessages = (req, res, next) =>
@@ -51,7 +51,7 @@ export const listMessages = (req, res, next) =>
 
 export const join = (req, res, next) =>
   req.channel.join(req.user.sub)
-    .then(() => res.send('done'))
+    .then(() => res.status(201).send('done'))
     .catch(next)
 
 export const listMembers = (req, res, next) =>

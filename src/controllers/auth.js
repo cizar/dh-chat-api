@@ -21,7 +21,7 @@ export const login = (req, res, next) =>
             expiresIn: config.jwt.expiresIn,
             subject: user.id
           })
-          res.send({ token })
+          res.status(201).send({ token })
         })
     })
     .catch(next)
