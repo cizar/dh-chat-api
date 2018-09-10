@@ -17,13 +17,14 @@ const unprotected = [
   { url: '/api/users', method: 'POST' }
 ]
 
-const ensureToken = jwt({
+const ensureAuth = jwt({
   secret: config.jwt.secret
 }).unless({
-  path: unprotected, method: ['OPTIONS', 'HEAD']
+  method: ['OPTIONS', 'HEAD'],
+  path: unprotected
 })
 
-app.use(ensureToken)
+app.use(ensureAuth)
 app.use('/api', routes)
 app.use(notFound)
 app.use(validationError)
@@ -50,3 +51,5 @@ connectDatabase()
     console.error(err)
     process.exit(1)
   })
+
+console.log(config.saltRounds)

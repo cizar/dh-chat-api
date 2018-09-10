@@ -19,11 +19,13 @@ const config = convict({
     env: 'PORT',
     arg: 'port'
   },
-  saltRounds: {
-    format: 'nat',
-    default: 10,
-    env: 'BCRYPT_SALT_ROUNDS',
-    arg: 'saltRounds'
+  bcrypt: {
+    saltRounds: {
+      format: 'nat',
+      default: 10,
+      env: 'BCRYPT_SALT_ROUNDS',
+      arg: 'rounds'
+    },
   },
   mongodb: {
     uri: {
@@ -44,12 +46,12 @@ const config = convict({
       format: String,
       default: 'dh-chat-api',
       env: 'JWT_ISSUER',
-      arg: 'issuer'
+      arg: 'iss'
     },
     expiresIn: {
       format: String,
       default: '1h',
-      env: 'JWT_EXP',
+      env: 'JWT_EXPIRES_IN',
       arg: 'exp'
     }
   }
