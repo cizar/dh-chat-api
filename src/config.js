@@ -19,14 +19,6 @@ const config = convict({
     env: 'PORT',
     arg: 'port'
   },
-  bcrypt: {
-    saltRounds: {
-      format: 'nat',
-      default: 10,
-      env: 'BCRYPT_SALT_ROUNDS',
-      arg: 'rounds'
-    },
-  },
   mongodb: {
     uri: {
       format: 'url',
@@ -38,7 +30,7 @@ const config = convict({
   jwt: {
     secret: {
       format: String,
-      default: 'S3cr3t!',
+      default: 'PleaseChangeMe',
       env: 'JWT_SECRET',
       arg: 'secret'
     },
@@ -54,6 +46,14 @@ const config = convict({
       env: 'JWT_EXPIRES_IN',
       arg: 'exp'
     }
+  },
+  bcrypt: {
+    saltRounds: {
+      format: 'nat',
+      default: 10,
+      env: 'BCRYPT_SALT_ROUNDS',
+      arg: 'rounds'
+    },
   }
 })
 

@@ -30,21 +30,6 @@ app.use(notFound)
 app.use(validationError)
 app.use(errorHandler)
 
-const startServer = () => {
-  console.log('Starting server...')
-  const server = app.listen(config.port, config.host, () => {
-    console.log('Server listening on port %d', server.address().port)
-  })
-}
-
-const connectDatabase = () => {
-  console.log('Connecting to MongoDB...')
-  return mongoose.connect(config.mongodb.uri, { useNewUrlParser: true })
-    .then(() => {
-      console.log('Connected to %s', mongoose.connections[0].host)
-    })
-}
-
 connectDatabase()
   .then(startServer)
   .catch(err => {
@@ -52,4 +37,19 @@ connectDatabase()
     process.exit(1)
   })
 
-console.log(config.saltRounds)
+function connectDatabase () {
+  process.stdout.write('Connecting to MongoDB...')
+  return mongoose.connect(config.mongodb.uri, { useNewUrlParser: true })
+    .then(() => {
+      const connection = mongoose.connections[0]
+      process.stdout.write(` done (${connection.host})\n`)
+    })
+}
+
+function startServer () {
+  process.stdout.write('Starting server...')
+  const server = app.listen(config.port, config.host, () => {
+    var address = server.address()
+    process.stdout.write(` done (${address.address}:${address.port})\n`)
+  })
+}
