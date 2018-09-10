@@ -1,18 +1,18 @@
-import User from '../models/user'
 import jwt from 'jsonwebtoken'
-import APIError from '../helpers/APIError'
+import { BadRequest } from 'http-errors'
+import User from '../models/user'
 import config from '../config'
 
 export const login = (req, res, next) =>
   User.get(req.body.username)
     .then(user => {
       if (!user) {
-        throw new APIError('Login failed', 400)
+        throw BadRequest('Login failed')
       }
       return user.comparePassword(req.body.password)
         .then(match => {
           if (!match) {
-            throw new APIError('Login failed', 400)
+            throw BadRequest('Login failed')
           }
           const token = jwt.sign({
             username: user.username

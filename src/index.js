@@ -17,13 +17,14 @@ const unprotected = [
   { url: '/api/users', method: 'POST' }
 ]
 
-app.use(
-  jwt({ secret: config.jwt.secret })
-    .unless({ path: unprotected, method: ['OPTIONS', 'HEAD'] })
-)
+const ensureToken = jwt({
+  secret: config.jwt.secret
+}).unless({
+  path: unprotected, method: ['OPTIONS', 'HEAD']
+})
 
+app.use(ensureToken)
 app.use('/api', routes)
-
 app.use(notFound)
 app.use(validationError)
 app.use(errorHandler)

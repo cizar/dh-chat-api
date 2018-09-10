@@ -1,6 +1,6 @@
+import { NotFound } from 'http-errors'
 import Channel from '../models/channel'
 import Message from '../models/message'
-import APIError from '../helpers/APIError'
 
 export const create = (req, res, next) =>
   Channel.create({
@@ -20,7 +20,7 @@ export const load = (req, res, next, id) =>
     Channel.get(id)
       .then(channel => {
         if (!channel) {
-          throw new APIError('Channel does not exists', 404)
+          throw NotFound('Channel does not exists')
         }
         req.channel = channel
         next()

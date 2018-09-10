@@ -1,5 +1,5 @@
+import { NotFound } from 'http-errors'
 import User from '../models/user'
-import APIError from '../helpers/APIError'
 
 export const signup = (req, res, next) =>
   User.create(req.body)
@@ -15,7 +15,7 @@ export const load = (req, res, next, id) =>
     User.get(id)
       .then(user => {
         if (!user) {
-          throw new APIError('User does not exists', 404)
+          throw NotFound('User does not exists')
         }
         req.user = user
         next()
