@@ -25,17 +25,21 @@ HOST=127.0.0.1
 
 MONGODB_URI=mongodb://user:pass@hostname:port/dbname
 
-SALT_WORK_FACTOR=10
-
-JWT_SECRET=S3cr3t!
-JWT_ISSUER=dh-chat-api
-JWT_EXPIRES_IN=1h
+JWT_SECRET=S00perS3cr1t!
+JWT_EXPIRES_IN=30m
 ```
 
 O bien pasando la configuración como variables del entorno
 
 ```
 MONGODB_URI=mongodb://user:pass@hostname:port/dbname npm start
+```
+
+O bien usando argumentos en la línea de comandos
+
+```
+npm run build
+node dist --port 9000
 ```
 
 ## Endpoints
