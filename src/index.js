@@ -1,9 +1,9 @@
 import express from 'express'
-import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import jwt from 'express-jwt'
 import { notFound, validationError, errorHandler } from './middlewares'
+import mongoose from 'mongoose'
 import routes from './routes'
 import config from './config'
 
@@ -30,6 +30,9 @@ app.use(notFound)
 app.use(validationError)
 app.use(errorHandler)
 
+mongoose.set('useCreateIndex', true)
+mongoose.set('useNewUrlParser', true)
+
 connectDatabase()
   .then(startServer)
   .catch(err => {
@@ -39,7 +42,7 @@ connectDatabase()
 
 function connectDatabase () {
   process.stdout.write('Connecting to MongoDB...')
-  return mongoose.connect(config.mongodb.uri, { useNewUrlParser: true })
+  return mongoose.connect(config.mongodb.uri)
     .then(() => {
       const connection = mongoose.connections[0]
       process.stdout.write(` done (${connection.host})\n`)
