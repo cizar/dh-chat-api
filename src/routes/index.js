@@ -1,8 +1,7 @@
 import { Router } from 'express'
-
-import authRouter from './auth'
-import usersRouter from './users'
-import channelsRouter from './channels'
+import authRouter from './auth.router'
+import usersRouter from './users.router'
+import channelsRouter from './channels.router'
 
 const router = Router()
 

@@ -5,76 +5,73 @@ import config from '../config'
 
 const { Schema, Types } = mongoose
 
-const schema = new Schema({
+const userSchema = new Schema({
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    match: /\S+@\S+\.\S+/
+  },
   username: {
     type: String,
     required: true,
+    unique: true,
     lowercase: true,
     match: /^[a-zA-Z0-9]+$/,
     minlength: 3,
-    maxlength: 24,
-    unique: true
+    maxlength: 24
   },
   password: {
     type: String,
     required: true
-  },
-  email: {
-    type: String,
-    required: true,
-    lowercase: true,
-    match: /\S+@\S+\.\S+/,
-    unique: true
   }
 }, {
-  toObject: {
+  toJSON: {
     transform (doc, ret) {
       delete ret.password
     }
   }
 })
 
-schema.plugin(uniqueValidator)
+userSchema.plugin(uniqueValidator)
 
-schema.pre('save', function (next) {
-  const user = this;
+userSchema.pre('save', function (next) {
   if (!this.isModified('password')) {
     return next()
   }
-  bcrypt.genSalt(config.bcrypt.saltRounds, function (err, salt) {
-    if (err) return next(err)
-    bcrypt.hash(user.password, salt, function (err, hash) {
-      if (err) return next(err)
-      user.password = hash
+  bcrypt.genSalt(config.bcrypt.saltRounds, (err, salt) => {
+    if (err) {
+      return next(err)
+    }
+    bcrypt.hash(this.password, salt, (err, hash) => {
+      if (err) {
+        return next(err)
+      }
+      this.password = hash
       next()
     })
   })
 })
 
-schema.methods = {
-  comparePassword (candidate) {
-    const user = this
-    return new Promise((resolve, reject) => {
-      bcrypt.compare(candidate, user.password, function (err, match) {
-        if (err) return reject(err)
-        resolve(match)
-      })
-    })
-  }
+userSchema.methods.comparePassword = async function (candidate) {
+  return bcrypt.compare(candidate, this.password)
 }
 
-schema.statics = {
-  get (id) {
-    const $or = [ { username: id }, { email: id }]
-    if (Types.ObjectId.isValid(id)) {
-      $or.push({ _id: id })
-    }
-    return this.findOne({ $or }).exec()
-  },
-  list () {
-    const criteria = {}
-    return this.find(criteria).exec()
+userSchema.query.byIdentity = async function (identity) {
+  if (!identity) {
+    throw Error('Invalid identity')
   }
+  const $or = [
+    { username: identity },
+    { email: identity }
+  ]
+  if (Types.ObjectId.isValid(identity)) {
+    $or.push({ _id: identity })
+  }
+  return this.findOne({ $or })
 }
 
-export default mongoose.model('User', schema)
+const userModel = mongoose.model('User', userSchema)
+
+export default userModel
