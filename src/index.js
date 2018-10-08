@@ -18,6 +18,7 @@ const unprotected = [
 ]
 
 const ensureAuth = jwt({
+  issuer: config.jwt.issuer,
   secret: config.jwt.secret
 }).unless({
   method: ['OPTIONS', 'HEAD'],
