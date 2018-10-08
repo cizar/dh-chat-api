@@ -1,9 +1,9 @@
 import express from 'express'
-import mongoose from 'mongoose'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import jwt from 'express-jwt'
 import { notFound, validationError, errorHandler } from './middlewares'
+import mongoose from 'mongoose'
 import routes from './routes'
 import config from './config'
 
@@ -17,32 +17,21 @@ const unprotected = [
   { url: '/api/users', method: 'POST' }
 ]
 
-const ensureToken = jwt({
+const ensureAuth = jwt({
   secret: config.jwt.secret
 }).unless({
-  path: unprotected, method: ['OPTIONS', 'HEAD']
+  method: ['OPTIONS', 'HEAD'],
+  path: unprotected
 })
 
-app.use(ensureToken)
+app.use(ensureAuth)
 app.use('/api', routes)
 app.use(notFound)
 app.use(validationError)
 app.use(errorHandler)
 
-const startServer = () => {
-  console.log('Starting server...')
-  const server = app.listen(config.port, config.host, () => {
-    console.log('Server listening on port %d', server.address().port)
-  })
-}
-
-const connectDatabase = () => {
-  console.log('Connecting to MongoDB...')
-  return mongoose.connect(config.mongodb.uri, { useNewUrlParser: true })
-    .then(() => {
-      console.log('Connected to %s', mongoose.connections[0].host)
-    })
-}
+mongoose.set('useCreateIndex', true)
+mongoose.set('useNewUrlParser', true)
 
 connectDatabase()
   .then(startServer)
@@ -50,3 +39,20 @@ connectDatabase()
     console.error(err)
     process.exit(1)
   })
+
+function connectDatabase () {
+  process.stdout.write('Connecting to MongoDB...')
+  return mongoose.connect(config.mongodb.uri)
+    .then(() => {
+      const connection = mongoose.connections[0]
+      process.stdout.write(` done (${connection.host})\n`)
+    })
+}
+
+function startServer () {
+  process.stdout.write('Starting server...')
+  const server = app.listen(config.port, config.host, () => {
+    var address = server.address()
+    process.stdout.write(` done (${address.address}:${address.port})\n`)
+  })
+}

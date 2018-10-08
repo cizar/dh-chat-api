@@ -1,7 +1,9 @@
-import mongoose, { Schema, Types } from 'mongoose'
+import mongoose from 'mongoose'
 import uniqueValidator from 'mongoose-unique-validator'
 import bcrypt from 'bcrypt'
 import config from '../config'
+
+const { Schema, Types } = mongoose
 
 const schema = new Schema({
   username: {
@@ -39,7 +41,7 @@ schema.pre('save', function (next) {
   if (!this.isModified('password')) {
     return next()
   }
-  bcrypt.genSalt(config.saltRounds, function (err, salt) {
+  bcrypt.genSalt(config.bcrypt.saltRounds, function (err, salt) {
     if (err) return next(err)
     bcrypt.hash(user.password, salt, function (err, hash) {
       if (err) return next(err)
